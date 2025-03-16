@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Box with Options</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            padding-top: 60px; /* Added space at the top to prevent overlap */
+        }
+
+        .search-container {
+            position: -webkit-sticky; /* For Safari */
+            position: sticky;
+            top: 10px; /* Keep it 10px from the top of the viewport */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            z-index: 100;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 25px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: #4CAF50;
+        }
+
+        .dots-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 20px;
+            width: 24px;
+            cursor: pointer;
+        }
+
+        .dots-icon div {
+            height: 4px;
+            background-color: #888;
+            width: 100%;
+            border-radius: 2px;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            width: 150px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.2s;
+        }
+
+        .menu a:last-child {
+            border-bottom: none;
+        }
+
+        .menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .quiz-container {
+            display: none;
+            margin-top: 80px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quiz-container ol {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .quiz-container li {
+            margin: 15px 0;
+        }
+
+        .quiz-container label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .submit-btn,
+        .retake-btn,
+        .back-home-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover,
+        .retake-btn:hover,
+        .back-home-btn:hover {
+            background-color: #45a049;
+        }
+
+        .back-home-btn {
+            background-color: #3498db;
+        }
+
+        .back-home-btn:hover {
+            background-color: #2980b9;
+        }
+
+        input[type="radio"]:checked + label {
+            color: #3498db;
+        }
+
+        .quiz-container .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .result-container {
+            margin-top: 20px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .wrong {
+            color: red;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Video Container */
+        .video-container {
+            display: none;
+            margin-top: 80px;
+            width: 80%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .video-container video {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        /* PPT Container */
+        .ppt-container {
+            display: none;
+            margin-top: 80px;
+            text-align: center;
+            width: 80%;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="search-container" id="searchContainer">
+        <input type="text" class="search-box" placeholder="Search..." />
+        <span class="dots-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </span>
+        
+        <div class="menu" id="optionsMenu">
+            <a href="javascript:void(0)" onclick="showQuiz()">Quiz</a>
+            <a href="javascript:void(0)" onclick="showVideo()">Video</a>
+            <a href="javascript:void(0)" onclick="showPPT()">PPT</a>
+        </div>
+    </div>
+
+    <!-- Quiz Section -->
+    <div class="quiz-container" id="quizSection">
+        <h2>Quiz Topic: Object Modelling using UML</h2>
+        <ol id="quizList">
+            <!-- Questions will be inserted here dynamically -->
+        </ol>
+
+        <button class="submit-btn" onclick="submitQuiz()">Submit</button>
+        <button class="retake-btn" onclick="retakeQuiz()" style="display: none;">Retake Quiz</button>
+        <button class="back-home-btn" onclick="goBackHome()">Back to Home</button>
+
+        <div class="error-message" id="errorContainer"></div>
+        
+        <div class="result-container" id="resultContainer"></div>
+    </div>
+
+    <!-- Video Section -->
+    <div class="video-container" id="videoSection">
+        <h2>Educational Video: UML Basics</h2>
+        <video id="videoPlayer" controls>
+            <source src="./final video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <button class="back-home-btn" onclick="goBackHome()">Back to Home</button>
+    </div>
+
+    <!-- PPT Section -->
+    <div class="ppt-container" id="pptSection">
+        <h2>Presentation: Object Modelling with UML</h2>
+        <embed src="https://docs.google.com/presentation/d/1KxetfASC3hHccOF5XgDu_sNN3DTPASh6/edit?usp=drive_link&ouid=109241025425011887309&rtpof=true&sd=true" 
+               width="100%" height="600px" type="application/pdf">
+        </embed>
+        <button class="back-home-btn" onclick="goBackHome()">Back to Home</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the purpose of Object Modelling?",
+                options: ["A way to represent and design software objects", "A method of handling data in programming", "A way to organize code into classes", "A graphical way of representing databases"],
+                correct: "A way to represent and design software objects"
+            },
+            {
+                question: "What does UML stand for?",
+                options: ["Unified Modeling Language", "Universal Model Language", "Unified Management Language", "Ultimate Modelling Language"],
+                correct: "Unified Modeling Language"
+            },
+            {
+                question: "Which diagram is used to represent the structure of a system?",
+                options: ["Class Diagram", "Activity Diagram", "Use Case Diagram", "Sequence Diagram"],
+                correct: "Class Diagram"
+            },
+            {
+                question: "What is the purpose of a sequence diagram?",
+                options: ["Show the flow of data in a system", "Show the static structure of classes", "Show the interaction between objects over time"],
+                correct: "Show the interaction between objects over time"
+            },
+            {
+                question: "Which UML diagram is used to model the structure of a system's classes?",
+                options: ["Use Case Diagram", "Class Diagram", "Deployment Diagram"],
+                correct: "Class Diagram"
+            },
+            {
+                question: "What symbol is used to represent a class in UML?",
+                options: ["Diamond", "Circle", "Rectangle"],
+                correct: "Rectangle"
+            },
+            {
+                question: "Which diagram is used to represent the dynamic behavior of a system?",
+                options: ["Class Diagram", "Activity Diagram", "Use Case Diagram", "Sequence Diagram"],
+                correct: "Activity Diagram"
+            },
+            {
+                question: "What does an association in UML represent?",
+                options: ["A method of communication between classes", "A static relationship between classes", "A relationship between two or more objects"],
+                correct: "A static relationship between classes"
+            },
+            {
+                question: "What is the purpose of a use case diagram in UML?",
+                options: ["To show the interaction between users and the system", "To represent the flow of data", "To display the interaction between objects over time"],
+                correct: "To show the interaction between users and the system"
+            },
+            {
+                question: "What symbol is used to represent an object in UML?",
+                options: ["Rectangle", "Ellipse", "Box with a dashed line"],
+                correct: "Box with a dashed line"
+            }
+        ];
+
+        function shuffleQuestions() {
+            for (let i = questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questions[i], questions[j]] = [questions[j], questions[i]];
+
+                for (let q of questions) {
+                    for (let i = q.options.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
+                    }
+                }
+            }
+        }
+
+        function loadQuiz() {
+            const quizList = document.getElementById("quizList");
+            quizList.innerHTML = ''; 
+
+            questions.forEach((q, index) => {
+                const questionItem = document.createElement("li");
+                const questionText = document.createElement("p");
+                questionText.textContent = `${index + 1}. ${q.question}`;
+                questionItem.appendChild(questionText);
+
+                q.options.forEach((option, i) => {
+                    const label = document.createElement("label");
+                    const radio = document.createElement("input");
+                    radio.type = "radio";
+                    radio.name = "q" + (index + 1);
+                    radio.value = option;
+                    label.appendChild(radio);
+                    label.appendChild(document.createTextNode(option));
+                    questionItem.appendChild(label);
+                    questionItem.appendChild(document.createElement("br"));
+                });
+
+                quizList.appendChild(questionItem);
+            });
+        }
+
+        function toggleMenu() {
+            var menu = document.getElementById("optionsMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        function hideMenu() {
+            var menu = document.getElementById("optionsMenu");
+            menu.style.display = "none";
+        }
+
+        function showQuiz() {
+            hideMenu(); // Hide the menu after option is clicked
+            var videoSection = document.getElementById("videoSection");
+            var pptSection = document.getElementById("pptSection");
+            var quizSection = document.getElementById("quizSection");
+
+            // Pause video if playing
+            const videoPlayer = document.getElementById("videoPlayer");
+            if (videoPlayer && !videoPlayer.paused) {
+                videoPlayer.pause();
+            }
+
+            shuffleQuestions();
+            loadQuiz();
+
+            quizSection.style.display = "block";
+            videoSection.style.display = "none";
+            pptSection.style.display = "none";
+        }
+
+        function showVideo() {
+            hideMenu();
+            var videoSection = document.getElementById("videoSection");
+            var pptSection = document.getElementById("pptSection");
+            var quizSection = document.getElementById("quizSection");
+
+            // Pause video if already playing
+            const videoPlayer = document.getElementById("videoPlayer");
+            if (videoPlayer && !videoPlayer.paused) {
+                videoPlayer.pause();
+            }
+
+            quizSection.style.display = "none";
+            pptSection.style.display = "none";
+            videoSection.style.display = "block";
+        }
+
+        function showPPT() {
+            hideMenu();
+            var videoSection = document.getElementById("videoSection");
+            var pptSection = document.getElementById("pptSection");
+            var quizSection = document.getElementById("quizSection");
+
+            // Pause video if playing
+            const videoPlayer = document.getElementById("videoPlayer");
+            if (videoPlayer && !videoPlayer.paused) {
+                videoPlayer.pause();
+            }
+
+            pptSection.style.display = "block";
+            videoSection.style.display = "none";
+            quizSection.style.display = "none";
+        }
+
+        function goBackHome() {
+            var quizSection = document.getElementById("quizSection");
+            var videoSection = document.getElementById("videoSection");
+            var pptSection = document.getElementById("pptSection");
+
+            quizSection.style.display = "none";
+            videoSection.style.display = "none";
+            pptSection.style.display = "none";
+        }
+
+        window.onload = function() {
+            showQuiz(); // Initially load quiz on page load
+        }
+    </script>
+
+</body>
+</html>
