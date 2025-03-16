@@ -9,13 +9,13 @@
             font-family: Arial, sans-serif;
             margin: 0;
             background-color: #f0f0f0;
-            padding-top: 60px; /* Added space at the top to prevent overlap */
+            padding-top: 60px;
         }
 
         .search-container {
-            position: -webkit-sticky; /* For Safari */
+            position: -webkit-sticky;
             position: sticky;
-            top: 10px; /* Keep it 10px from the top of the viewport */
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
             width: 80%;
@@ -88,6 +88,7 @@
             background-color: #f0f0f0;
         }
 
+        /* Quiz Section */
         .quiz-container {
             display: none;
             margin-top: 80px;
@@ -148,31 +149,13 @@
             color: #3498db;
         }
 
-        .quiz-container .error-message {
+        .error-message {
             color: red;
             font-size: 14px;
             margin-top: 10px;
         }
 
-        .result-container {
-            margin-top: 20px;
-        }
-
-        .correct {
-            color: green;
-        }
-
-        .wrong {
-            color: red;
-        }
-
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-
-        /* Video Container */
+        /* Video Section */
         .video-container {
             display: none;
             margin-top: 80px;
@@ -191,14 +174,7 @@
             border-radius: 10px;
         }
 
-        @media (max-width: 768px) {
-            .video-container video {
-                width: 100%;
-                height: auto;
-            }
-        }
-
-        /* PPT Container */
+        /* PPT Section */
         .ppt-container {
             display: none;
             margin-top: 80px;
@@ -263,176 +239,243 @@
     </div>
 
     <script>
-        const questions = [
-            {
-                question: "What is the purpose of Object Modelling?",
-                options: ["A way to represent and design software objects", "A method of handling data in programming", "A way to organize code into classes", "A graphical way of representing databases"],
-                correct: "A way to represent and design software objects"
-            },
-            {
-                question: "What does UML stand for?",
-                options: ["Unified Modeling Language", "Universal Model Language", "Unified Management Language", "Ultimate Modelling Language"],
-                correct: "Unified Modeling Language"
-            },
-            {
-                question: "Which diagram is used to represent the structure of a system?",
-                options: ["Class Diagram", "Activity Diagram", "Use Case Diagram", "Sequence Diagram"],
-                correct: "Class Diagram"
-            },
-            {
-                question: "What is the purpose of a sequence diagram?",
-                options: ["Show the flow of data in a system", "Show the static structure of classes", "Show the interaction between objects over time"],
-                correct: "Show the interaction between objects over time"
-            },
-            {
-                question: "Which UML diagram is used to model the structure of a system's classes?",
-                options: ["Use Case Diagram", "Class Diagram", "Deployment Diagram"],
-                correct: "Class Diagram"
-            },
-            {
-                question: "What symbol is used to represent a class in UML?",
-                options: ["Diamond", "Circle", "Rectangle"],
-                correct: "Rectangle"
-            },
-            {
-                question: "Which diagram is used to represent the dynamic behavior of a system?",
-                options: ["Class Diagram", "Activity Diagram", "Use Case Diagram", "Sequence Diagram"],
-                correct: "Activity Diagram"
-            },
-            {
-                question: "What does an association in UML represent?",
-                options: ["A method of communication between classes", "A static relationship between classes", "A relationship between two or more objects"],
-                correct: "A static relationship between classes"
-            },
-            {
-                question: "What is the purpose of a use case diagram in UML?",
-                options: ["To show the interaction between users and the system", "To represent the flow of data", "To display the interaction between objects over time"],
-                correct: "To show the interaction between users and the system"
-            },
-            {
-                question: "What symbol is used to represent an object in UML?",
-                options: ["Rectangle", "Ellipse", "Box with a dashed line"],
-                correct: "Box with a dashed line"
-            }
-        ];
+    const questions = [
+        {
+            question: "What is the purpose of Object Modelling?",
+            options: ["A way to represent and design software objects", "A method of handling data in programming", "A way to organize code into classes", "A graphical way of representing databases"],
+            correct: "A way to represent and design software objects"
+        },
+        {
+            question: "What does UML stand for?",
+            options: ["Unified Modeling Language", "Universal Model Language", "Unified Management Language", "Ultimate Modelling Language"],
+            correct: "Unified Modeling Language"
+        },
+        {
+            question: "Which diagram is used to represent the structure of a system?",
+            options: ["Class Diagram", "Activity Diagram", "Use Case Diagram", "Sequence Diagram"],
+            correct: "Class Diagram"
+        },
+        {
+            question: "What is the purpose of a sequence diagram?",
+            options: ["Show the flow of data in a system", "Show the static structure of classes", "Show the interaction between objects over time"],
+            correct: "Show the interaction between objects over time"
+        },
+        {
+            question: "Which UML diagram is used to model the structure of a system's classes?",
+            options: ["Use Case Diagram", "Class Diagram", "Deployment Diagram"],
+            correct: "Class Diagram"
+        },
+        {
+            question: "What symbol is used to represent a class in UML?",
+            options: ["Diamond", "Circle", "Rectangle"],
+            correct: "Rectangle"
+        },
+        {
+            question: "Which diagram is used to represent the dynamic behavior of a system?",
+            options: ["Class Diagram", "Activity Diagram", "Use Case Diagram", "Sequence Diagram"],
+            correct: "Activity Diagram"
+        },
+        {
+            question: "What does an association in UML represent?",
+            options: ["A method of communication between classes", "A static relationship between classes", "A relationship between two or more objects"],
+            correct: "A static relationship between classes"
+        },
+        {
+            question: "What is the purpose of a use case diagram in UML?",
+            options: ["To show the interaction between users and the system", "To represent the flow of data", "To display the interaction between objects over time"],
+            correct: "To show the interaction between users and the system"
+        },
+        {
+            question: "What symbol is used to represent an object in UML?",
+            options: ["Rectangle", "Ellipse", "Box with a dashed line"],
+            correct: "Box with a dashed line"
+        }
+    ];
 
-        function shuffleQuestions() {
-            for (let i = questions.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [questions[i], questions[j]] = [questions[j], questions[i]];
+    function shuffleQuestions() {
+        for (let i = questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [questions[i], questions[j]] = [questions[j], questions[i]];
 
-                for (let q of questions) {
-                    for (let i = q.options.length - 1; i > 0; i--) {
-                        const j = Math.floor(Math.random() * (i + 1));
-                        [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
-                    }
+            for (let q of questions) {
+                for (let i = q.options.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
                 }
             }
         }
+    }
 
-        function loadQuiz() {
-            const quizList = document.getElementById("quizList");
-            quizList.innerHTML = ''; 
+    function loadQuiz() {
+        const quizList = document.getElementById("quizList");
+        quizList.innerHTML = ''; 
 
-            questions.forEach((q, index) => {
-                const questionItem = document.createElement("li");
-                const questionText = document.createElement("p");
-                questionText.textContent = `${index + 1}. ${q.question}`;
-                questionItem.appendChild(questionText);
+        questions.forEach((q, index) => {
+            const questionItem = document.createElement("li");
+            const questionText = document.createElement("p");
+            questionText.textContent = `${index + 1}. ${q.question}`;
+            questionItem.appendChild(questionText);
 
-                q.options.forEach((option, i) => {
-                    const label = document.createElement("label");
-                    const radio = document.createElement("input");
-                    radio.type = "radio";
-                    radio.name = "q" + (index + 1);
-                    radio.value = option;
-                    label.appendChild(radio);
-                    label.appendChild(document.createTextNode(option));
-                    questionItem.appendChild(label);
-                    questionItem.appendChild(document.createElement("br"));
-                });
-
-                quizList.appendChild(questionItem);
+            q.options.forEach((option, i) => {
+                const label = document.createElement("label");
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = "q" + (index + 1);
+                radio.value = option;
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(option));
+                questionItem.appendChild(label);
+                questionItem.appendChild(document.createElement("br"));
             });
+
+            quizList.appendChild(questionItem);
+        });
+    }
+
+    function toggleMenu() {
+        var menu = document.getElementById("optionsMenu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+
+    function hideMenu() {
+        var menu = document.getElementById("optionsMenu");
+        menu.style.display = "none";
+    }
+
+    function showQuiz() {
+        hideMenu();
+        var videoSection = document.getElementById("videoSection");
+        var pptSection = document.getElementById("pptSection");
+        var quizSection = document.getElementById("quizSection");
+        var searchContainer = document.getElementById("searchContainer");
+
+        // Pause video if playing
+        const videoPlayer = document.getElementById("videoPlayer");
+        if (videoPlayer && !videoPlayer.paused) {
+            videoPlayer.pause();
         }
 
-        function toggleMenu() {
-            var menu = document.getElementById("optionsMenu");
-            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        shuffleQuestions();
+        loadQuiz();
+
+        searchContainer.style.display = "none"; // Hide the search box and options
+        quizSection.style.display = "block";
+        videoSection.style.display = "none";
+        pptSection.style.display = "none";
+    }
+
+    function showVideo() {
+        hideMenu();
+        var videoSection = document.getElementById("videoSection");
+        var pptSection = document.getElementById("pptSection");
+        var quizSection = document.getElementById("quizSection");
+        var searchContainer = document.getElementById("searchContainer");
+
+        // Pause video if already playing
+        const videoPlayer = document.getElementById("videoPlayer");
+        if (videoPlayer && !videoPlayer.paused) {
+            videoPlayer.pause();
         }
 
-        function hideMenu() {
-            var menu = document.getElementById("optionsMenu");
-            menu.style.display = "none";
+        searchContainer.style.display = "none";
+        quizSection.style.display = "none";
+        pptSection.style.display = "none";
+        videoSection.style.display = "block";
+    }
+
+    function showPPT() {
+        hideMenu();
+        var videoSection = document.getElementById("videoSection");
+        var pptSection = document.getElementById("pptSection");
+        var quizSection = document.getElementById("quizSection");
+        var searchContainer = document.getElementById("searchContainer");
+
+        // Pause video if playing
+        const videoPlayer = document.getElementById("videoPlayer");
+        if (videoPlayer && !videoPlayer.paused) {
+            videoPlayer.pause();
         }
 
-        function showQuiz() {
-            hideMenu(); // Hide the menu after option is clicked
-            var videoSection = document.getElementById("videoSection");
-            var pptSection = document.getElementById("pptSection");
-            var quizSection = document.getElementById("quizSection");
+        searchContainer.style.display = "none";
+        pptSection.style.display = "block";
+        videoSection.style.display = "none";
+        quizSection.style.display = "none";
+    }
 
-            // Pause video if playing
-            const videoPlayer = document.getElementById("videoPlayer");
-            if (videoPlayer && !videoPlayer.paused) {
-                videoPlayer.pause();
+    function goBackHome() {
+        var quizSection = document.getElementById("quizSection");
+        var videoSection = document.getElementById("videoSection");
+        var pptSection = document.getElementById("pptSection");
+        var searchContainer = document.getElementById("searchContainer");
+
+        quizSection.style.display = "none";
+        videoSection.style.display = "none";
+        pptSection.style.display = "none";
+        searchContainer.style.display = "block"; // Show the search box and options
+    }
+
+    // Submit quiz function
+    function submitQuiz() {
+        let score = 0;
+        const totalQuestions = questions.length;
+
+        // Loop through each question
+        questions.forEach((question, index) => {
+            const selectedOption = document.querySelector(`input[name="q${index + 1}"]:checked`);
+
+            // Check if an answer was selected
+            if (selectedOption) {
+                const answer = selectedOption.value;
+
+                // Compare selected answer with the correct one
+                if (answer === question.correct) {
+                    score++;
+                }
             }
+        });
 
-            shuffleQuestions();
-            loadQuiz();
+        // Show result after submitting
+        const resultContainer = document.getElementById("resultContainer");
+        const errorContainer = document.getElementById("errorContainer");
 
-            quizSection.style.display = "block";
-            videoSection.style.display = "none";
-            pptSection.style.display = "none";
+        // Show error if no questions were answered
+        if (score === 0) {
+            errorContainer.textContent = "Please answer at least one question before submitting.";
+            resultContainer.style.display = "none";
+        } else {
+            errorContainer.textContent = "";
+            resultContainer.style.display = "block";
+            resultContainer.innerHTML = `<p>Your score: ${score} / ${totalQuestions}</p>`;
         }
 
-        function showVideo() {
-            hideMenu();
-            var videoSection = document.getElementById("videoSection");
-            var pptSection = document.getElementById("pptSection");
-            var quizSection = document.getElementById("quizSection");
+        // Hide the submit button and show retake option
+        const submitButton = document.querySelector(".submit-btn");
+        const retakeButton = document.querySelector(".retake-btn");
+        submitButton.style.display = "none";
+        retakeButton.style.display = "block";
+    }
 
-            // Pause video if already playing
-            const videoPlayer = document.getElementById("videoPlayer");
-            if (videoPlayer && !videoPlayer.paused) {
-                videoPlayer.pause();
-            }
+    // Retake quiz function
+    function retakeQuiz() {
+        // Reset selected answers
+        const selectedAnswers = document.querySelectorAll("input[type='radio']:checked");
+        selectedAnswers.forEach((answer) => {
+            answer.checked = false;
+        });
 
-            quizSection.style.display = "none";
-            pptSection.style.display = "none";
-            videoSection.style.display = "block";
-        }
+        // Reset result and error messages
+        document.getElementById("resultContainer").style.display = "none";
+        document.getElementById("errorContainer").textContent = "";
 
-        function showPPT() {
-            hideMenu();
-            var videoSection = document.getElementById("videoSection");
-            var pptSection = document.getElementById("pptSection");
-            var quizSection = document.getElementById("quizSection");
+        // Show the submit button again
+        document.querySelector(".submit-btn").style.display = "block";
+        document.querySelector(".retake-btn").style.display = "none";
+    }
 
-            // Pause video if playing
-            const videoPlayer = document.getElementById("videoPlayer");
-            if (videoPlayer && !videoPlayer.paused) {
-                videoPlayer.pause();
-            }
+    window.onload = function() {
+        goBackHome(); // Initially load the home screen
+    }
 
-            pptSection.style.display = "block";
-            videoSection.style.display = "none";
-            quizSection.style.display = "none";
-        }
-
-        function goBackHome() {
-            var quizSection = document.getElementById("quizSection");
-            var videoSection = document.getElementById("videoSection");
-            var pptSection = document.getElementById("pptSection");
-
-            quizSection.style.display = "none";
-            videoSection.style.display = "none";
-            pptSection.style.display = "none";
-        }
-
-        window.onload = function() {
-            showQuiz(); // Initially load quiz on page load
-        }
     </script>
 
 </body>
